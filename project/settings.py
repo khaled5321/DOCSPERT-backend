@@ -8,11 +8,10 @@ env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6h8onju-#&k#s51*io-&gsk00+7t)y%cj(&6vr*te)wnf3p25h"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
-
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1"]
@@ -29,11 +28,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party apps
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "drf_spectacular",
     "drf_spectacular_sidecar",
     # Local apps
     "accounts",
+    "books",
 ]
 
 MIDDLEWARE = [
