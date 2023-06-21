@@ -15,6 +15,9 @@ class Book(models.Model):
 
 class Page(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="pages")
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="author_pages"
+    )
     number = models.IntegerField()
     text = models.TextField()
 
