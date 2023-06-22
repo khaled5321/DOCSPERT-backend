@@ -7,13 +7,14 @@ class AuthorPermission(BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user.is_author
+        if request.user.is_authenticated and request.user.is_author:
+            return True
 
     def has_object_permission(self, request, view, obj):
-        # if request.user.is_authenticated and request.method in SAFE_METHODS:
-        #     return True
+        if obj.author != request.user:
+            return False
 
-        return obj.author == request.user
+        return True
 
 
 class ReaderPermission(BasePermission):
@@ -22,7 +23,5 @@ class ReaderPermission(BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.method in SAFE_METHODS
-
-    # def has_object_permission(self, request, view, obj):
-    #     return super().has_object_permission(request, view, obj)
+        if request.user.is_authenticated and request.method in SAFE_METHODS:
+            return True
