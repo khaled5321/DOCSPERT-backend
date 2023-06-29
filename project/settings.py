@@ -11,11 +11,11 @@ environ.Env.read_env(BASE_DIR / ".env")
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = int(env("DEBUG"))
 
-ALLOWED_HOSTS = ["127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1"]
-CORS_ALLOWED_ORIGINS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+CSRF_TRUSTED_ORIGINS = [env("ALLOWED_ORIGIN")]
+CORS_ALLOWED_ORIGINS = [env("ALLOWED_ORIGIN")]
 
 AUTH_USER_MODEL = "accounts.User"
 
@@ -74,9 +74,13 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+        "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": env("DB_NAME", default=f"{BASE_DIR / 'db.sqlite3'}"),
+        "USER": env("DB_USER", default="user"),
+        "PASSWORD": env("DB_PASSWORD", default="password"),
+        "HOST": env("DB_HOST", default="localhost"),
+        "PORT": env("DB_PORT", default="5432"),
+    },
 }
 
 
@@ -138,8 +142,8 @@ SIMPLE_JWT = {
 
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = []
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# STATICFILES_DIRS = []
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
