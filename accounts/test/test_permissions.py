@@ -1,10 +1,9 @@
 from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
 from books.models import Book
-from .permissions import AuthorPermission, ReaderPermission
+from ..permissions import AuthorPermission, ReaderPermission
 
 
-# permession testing.
 class PermissionsTest(TestCase):
     def setUp(self):
         self.User = get_user_model()
@@ -66,3 +65,13 @@ class PermissionsTest(TestCase):
         permission = permission_check.has_object_permission(request, None, self.book)
 
         self.assertFalse(permission)
+
+    def test_book_author_can_edit_his_book(self):
+        request = self.factory.delete(f"/api/v1/books/{self.book.id}/")
+        request.user = self.another_author
+
+        permission_check = AuthorPermission()
+
+        permission = permission_check.has_object_permission(request, None, self.book)
+
+        self.assertTrue(permission)
