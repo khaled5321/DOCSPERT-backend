@@ -10,15 +10,14 @@ class UserSignUp(CreateAPIView):
     serializer_class = UserSerializer
 
 
-class GetUser(APIView):
+class GetCurrentUser(APIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def get(self, request):
         """
         Return current user.
         """
-        current_user = User.objects.get(id=request.user.id)
-        current_user = UserSerializer(current_user).data
-        
+        current_user = UserSerializer(request.user).data
+
         return Response(current_user)
